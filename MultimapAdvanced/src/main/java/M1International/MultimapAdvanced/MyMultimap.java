@@ -4,10 +4,9 @@ package M1International.MultimapAdvanced;
  */
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multiset;
+import com.google.common.collect.*;
 
+import java.util.AbstractCollection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -29,6 +28,17 @@ public final class MyMultimap<K,V> implements Multimap<K, V> {
 	
 	private transient Map<K, Collection<V>> map;
 	private transient int totalSize;
+	private MyMultimap() {
+		// TODO Auto-generated constructor stub
+		map=new HashMap<K, Collection<V>>();
+		expectedValuesPerKey = VALUESPER_KEY;
+	}
+	private MyMultimap(int expectedKeys, int expectedValuesPerKey1) {
+		// TODO Auto-generated constructor stub
+		Maps.<K, Collection<V>>newHashMapWithExpectedSize(expectedKeys);
+		    checkArgument(expectedValuesPerKey >= 0);
+	        this.expectedValuesPerKey = expectedValuesPerKey1;
+	}
 	
 	public static <K, V> MyMultimap<K, V> create() {
 	     return new MyMultimap<K, V>();
@@ -37,18 +47,6 @@ public final class MyMultimap<K,V> implements Multimap<K, V> {
 		       int expectedKeys, int expectedValuesPerKey) {
 		       return new MyMultimap<K, V>(expectedKeys, expectedValuesPerKey);
 		   }
-	
-	private MyMultimap() {
-		// TODO Auto-generated constructor stub
-		map=new HashMap<K, Collection<V>>();
-		expectedValuesPerKey = VALUESPER_KEY;
-	}
-	private MyMultimap(int expectedKeys, int expectedValuesPerKey2) {
-		// TODO Auto-generated constructor stub
-		Maps.<K, Collection<V>>newHashMapWithExpectedSize(expectedKeys);
-		    checkArgument(expectedValuesPerKey >= 0);
-	        this.expectedValuesPerKey = expectedValuesPerKey2;
-	}
 	public int size() {
 		// TODO Auto-generated method stub
 		return totalSize;
@@ -223,14 +221,207 @@ public final class MyMultimap<K,V> implements Multimap<K, V> {
 	      }
 		return null;
 	}
-	public Collection<V> values() {
-		// TODO Auto-generated method stub
-		Collection<V> Values=new ArrayList<V>();
-		for (Collection<V> collection : map.values()) {
-		       Values.addAll(collection);
+	/*private class MultisetView<E> extends AbstractMultiset<K> {
+		 
+		     @Override public int remove(Object key, int occurrences) {
+		       if (occurrences == 0) {
+		         return count(key);
+		       }
+		       checkArgument(occurrences > 0);
+		 
+		       Collection<V> collection;
+		       try {
+		         collection = map.get(key);
+		       } catch (NullPointerException e) {
+		         return 0;
+		       } catch (ClassCastException e) {
+		         return 0;
+		       }
+		 
+		       if (collection == null) {
+		         return 0;
+		       }
+		       int count = collection.size();
+		 
+		       if (occurrences >= count) {
+		         return removeValuesForKey(key);
+		       }
+		 
+		       Iterator<V> iterator = collection.iterator();
+		       for (int i = 0; i < occurrences; i++) {
+		         iterator.next();
+		         iterator.remove();
+		       }
+		       totalSize -= occurrences;
+		       return count;
 		     }
-		return Values;
-	}
+		 
+		     @Override public Set<K> elementSet() {
+		       return MyMultimap.this.keySet();
+		     }
+		 
+		     transient Set<Multiset.Entry<K>> entrySet;
+		 
+		     @Override public Set<Multiset.Entry<K>> entrySet() {
+		       Set<Multiset.Entry<K>> result = entrySet;
+		       return (result == null) ? entrySet = new EntrySet() : result;
+		     }
+		
+		     private class EntrySet extends AbstractSet<Multiset.Entry<K>> {
+		       @Override public Iterator<Multiset.Entry<K>> iterator() {
+		        return new MultisetEntryIterator();
+		      }
+		     @Override public int size() {
+		       return map.size();
+		      }
+		
+		      // The following methods are included for better performance.
+		
+		      @Override public boolean contains(Object o) {
+		        if (!(o instanceof Multiset.Entry)) {
+		          return false;
+		        }
+		        Multiset.Entry<?> entry = (Multiset.Entry<?>) o;
+		        Collection<V> collection = map.get(entry.getElement());
+		        return (collection != null) &&
+		            (collection.size() == entry.getCount());
+		      }
+		      @Override public void clear() {
+		        MyMultimap.this.clear();
+		      }
+		      @Override public boolean remove(Object o) {
+		        return contains(o) &&
+		            (removeValuesForKey(((Multiset.Entry<?>) o).getElement()) > 0);
+		      }
+		    }
+		
+		    @Override public Iterator<K> iterator() {
+		      return new MultisetKeyIterator();
+		    }
+		
+		    // The following methods are included for better performance.
+		
+		    @Override public int count(Object key) {
+		      try {
+		        Collection<V> collection = map.get(key);
+		        return (collection == null) ? 0 : collection.size();
+		      } catch (NullPointerException e) {
+		        return 0;
+		      } catch (ClassCastException e) {
+		        return 0;
+		      }
+		    }
+		
+		    @Override public int size() {
+		      return totalSize;
+		    }
+		
+		    @Override public void clear() {
+		      MyMultimap.this.clear();
+		    }
+		    private int removeValuesForKey(Object key) {
+		    	    Collection<V> collection;
+		    	    try {
+		    	      collection = map.remove(key);
+		    	    } catch (NullPointerException e) {
+		    	      return 0;
+		    	    } catch (ClassCastException e) {
+		    	      return 0;
+		    	    }
+		    	
+		    	    int count = 0;
+		    	    if (collection != null) {
+		    	      count = collection.size();
+		    	      collection.clear();
+		    	      totalSize -= count;
+		    	    }
+		    	    return count;
+		    	  }
+*/
+	
+	private transient Collection<V> values;
+	  
+    public Collection<V> values() {
+			// TODO Auto-generated method stub
+			Collection<V> result = values;
+		    return (result == null) ? values = createValues() : result;
+		}
+	  
+	  Collection<V> createValues() {
+	    return new Values();
+	  }
+
+	  class Values extends AbstractCollection<V> {
+	    @Override public Iterator<V> iterator() {
+	      return new ValueIterator();
+	    }
+
+	    @Override public int size() {
+	      return MyMultimap.this.size();
+	    }
+
+	    @Override public boolean contains(Object o) {
+	      return MyMultimap.this.containsValue(o);
+	    }
+
+	    @Override public void clear() {
+	      MyMultimap.this.clear();
+	    }
+	  }
+	  private class ValueIterator implements Iterator<V> {
+		      final Iterator<Map.Entry<K, V>> entryIterator = createEntryIterator();
+		  
+		      public boolean hasNext() {
+		        return entryIterator.hasNext();
+		      }
+		      public V next() {
+		        return entryIterator.next().getValue();
+		      }
+		      public void remove() {
+		        entryIterator.remove();
+		      }
+		    }
+	  Iterator<Map.Entry<K, V>> createEntryIterator() {
+		      return new EntryIterator();
+		    }
+	  private class EntryIterator implements Iterator<Map.Entry<K, V>> {
+		      final Iterator<Map.Entry<K, Collection<V>>> keyIterator;
+		      K key;
+		      Collection<V> collection;
+		      Iterator<V> valueIterator;
+		  
+		      EntryIterator() {
+		        keyIterator = map.entrySet().iterator();
+		        if (keyIterator.hasNext()) {
+		          findValueIteratorAndKey();
+		        }
+		      }
+		  
+		      void findValueIteratorAndKey() {
+		        Map.Entry<K, Collection<V>> entry = keyIterator.next();
+		        key = entry.getKey();
+		        collection = entry.getValue();
+		        valueIterator = collection.iterator();
+		      }
+		  		      public boolean hasNext() {
+		        return keyIterator.hasNext() || valueIterator.hasNext();
+		      }
+		  
+		      public Map.Entry<K, V> next() {
+		        if (!valueIterator.hasNext()) {
+		          findValueIteratorAndKey();
+		        }
+		        return Maps.immutableEntry(key, valueIterator.next());
+		      }
+		  
+		      public void remove() {
+		        valueIterator.remove();
+		        if (collection.isEmpty()) {
+		          keyIterator.remove();
+		        }
+		        totalSize--;
+		      }
+		    }
 	public Collection<Entry<K, V>> entries() {
 		return null;
 		// TODO Auto-generated method stub
