@@ -26,9 +26,7 @@ public class GuavaMultimap {
 	      List<String> lowerList = (List<String>)multimap.get("lower");
 	      System.out.println("Initial lower case list");
 	      System.out.println(lowerList.toString());
-	      
 	      lowerList.add("f");
-	      
 	      System.out.println("Modified lower case list");
 	      System.out.println(lowerList.toString());
 	      Multiset<String> keysMultiset=multimap.keys();

@@ -210,137 +210,155 @@ public final class MyMultimap<K,V> implements Multimap<K, V> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	private transient Multiset<K> keys;
 	public Multiset<K> keys() {
 		// TODO Auto-generated method stub
-		 Set<Entry<K, Collection<V>>> set = map.entrySet();
-	     Iterator<Entry<K, Collection<V>>> i = set.iterator();
-	      while(i.hasNext()) {
-	         @SuppressWarnings("rawtypes")
-			 Map.Entry me = (Map.Entry)i.next();
-	         System.out.print(me.getKey() + ": ");
-	      }
-		return null;
+		Multiset<K> multiset=keys;
+		return  (multiset==null)?keys=new MyMultiset():multiset;
 	}
-	/*private class MultisetView<E> extends AbstractMultiset<K> {
-		 
-		     @Override public int remove(Object key, int occurrences) {
-		       if (occurrences == 0) {
-		         return count(key);
-		       }
-		       checkArgument(occurrences > 0);
-		 
-		       Collection<V> collection;
+	@SuppressWarnings("unused")
+	private class MyMultiset implements Multiset<K> {
+
+		public boolean addAll(Collection<? extends K> c) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public void clear() {
+			// TODO Auto-generated method stub
+			map.clear();
+		}
+
+		public boolean isEmpty() {
+			// TODO Auto-generated method stub
+			return totalSize==0;
+		}
+
+		public int size() {
+			// TODO Auto-generated method stub
+			return totalSize;
+		}
+
+		public Object[] toArray() {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public <T> T[] toArray(T[] a) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public int count(Object element) {
+			// TODO Auto-generated method stub
+			Collection<V> collection;
 		       try {
-		         collection = map.get(key);
+		         collection = map.get(element);
+		         return collection==null?0:collection.size();
 		       } catch (NullPointerException e) {
 		         return 0;
 		       } catch (ClassCastException e) {
 		         return 0;
 		       }
-		 
-		       if (collection == null) {
-		         return 0;
-		       }
-		       int count = collection.size();
-		 
-		       if (occurrences >= count) {
-		         return removeValuesForKey(key);
-		       }
-		 
-		       Iterator<V> iterator = collection.iterator();
-		       for (int i = 0; i < occurrences; i++) {
-		         iterator.next();
-		         iterator.remove();
-		       }
-		       totalSize -= occurrences;
-		       return count;
-		     }
-		 
-		     @Override public Set<K> elementSet() {
-		       return MyMultimap.this.keySet();
-		     }
-		 
-		     transient Set<Multiset.Entry<K>> entrySet;
-		 
-		     @Override public Set<Multiset.Entry<K>> entrySet() {
-		       Set<Multiset.Entry<K>> result = entrySet;
-		       return (result == null) ? entrySet = new EntrySet() : result;
-		     }
+		}
+
+		public int add(K element, int occurrences) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+		public int remove(Object element, int occurrences) {
+			// TODO Auto-generated method stub
+			if (occurrences == 0) {
+				         return count(element);
+				       }
+				       checkArgument(occurrences > 0);
+				 
+				       Collection<V> collection;
+				       try {
+				         collection = map.get(element);
+				       } catch (NullPointerException e) {
+				         return 0;
+				       } catch (ClassCastException e) {
+				         return 0;
+				       }
+				 
+				       if (collection == null) {
+				         return 0;
+				       }
+				       int count = collection.size();
+				 
+				       if (occurrences >= count && collection != null) {
+				         int elements=collection.size();
+				         map.remove(element);
+				         totalSize=-elements;
+				         return elements;
+				      }
+				 
+				       Iterator<V> iterator = collection.iterator();
+				      for (int i = 0; i < occurrences; i++) {
+				         iterator.next();
+				         iterator.remove();
+				       }
+				       totalSize -= occurrences;
+				      return count;
+				     }
+
+		public int setCount(K element, int count) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+		public boolean setCount(K element, int oldCount, int newCount) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public Set<K> elementSet() {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public Set<com.google.common.collect.Multiset.Entry<K>> entrySet() {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public Iterator<K> iterator() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public boolean contains(Object element) {
+			// TODO Auto-generated method stub
+			return map.containsKey(element);
+		}
+
+		public boolean containsAll(Collection<?> elements) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean add(K element) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean remove(Object element) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean removeAll(Collection<?> c) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean retainAll(Collection<?> c) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
 		
-		     private class EntrySet extends AbstractSet<Multiset.Entry<K>> {
-		       @Override public Iterator<Multiset.Entry<K>> iterator() {
-		        return new MultisetEntryIterator();
-		      }
-		     @Override public int size() {
-		       return map.size();
-		      }
-		
-		      // The following methods are included for better performance.
-		
-		      @Override public boolean contains(Object o) {
-		        if (!(o instanceof Multiset.Entry)) {
-		          return false;
-		        }
-		        Multiset.Entry<?> entry = (Multiset.Entry<?>) o;
-		        Collection<V> collection = map.get(entry.getElement());
-		        return (collection != null) &&
-		            (collection.size() == entry.getCount());
-		      }
-		      @Override public void clear() {
-		        MyMultimap.this.clear();
-		      }
-		      @Override public boolean remove(Object o) {
-		        return contains(o) &&
-		            (removeValuesForKey(((Multiset.Entry<?>) o).getElement()) > 0);
-		      }
-		    }
-		
-		    @Override public Iterator<K> iterator() {
-		      return new MultisetKeyIterator();
-		    }
-		
-		    // The following methods are included for better performance.
-		
-		    @Override public int count(Object key) {
-		      try {
-		        Collection<V> collection = map.get(key);
-		        return (collection == null) ? 0 : collection.size();
-		      } catch (NullPointerException e) {
-		        return 0;
-		      } catch (ClassCastException e) {
-		        return 0;
-		      }
-		    }
-		
-		    @Override public int size() {
-		      return totalSize;
-		    }
-		
-		    @Override public void clear() {
-		      MyMultimap.this.clear();
-		    }
-		    private int removeValuesForKey(Object key) {
-		    	    Collection<V> collection;
-		    	    try {
-		    	      collection = map.remove(key);
-		    	    } catch (NullPointerException e) {
-		    	      return 0;
-		    	    } catch (ClassCastException e) {
-		    	      return 0;
-		    	    }
-		    	
-		    	    int count = 0;
-		    	    if (collection != null) {
-		    	      count = collection.size();
-		    	      collection.clear();
-		    	      totalSize -= count;
-		    	    }
-		    	    return count;
-		    	  }
-*/
-	
-	private transient Collection<V> values;
-	  
+}
+    private transient Collection<V> values;
     public Collection<V> values() {
 			// TODO Auto-generated method stub
 			Collection<V> result = values;
@@ -380,10 +398,11 @@ public final class MyMultimap<K,V> implements Multimap<K, V> {
 		      public void remove() {
 		        entryIterator.remove();
 		      }
+		      Iterator<Map.Entry<K, V>> createEntryIterator() {
+			      return new EntryIterator();
+			    }
 		    }
-	  Iterator<Map.Entry<K, V>> createEntryIterator() {
-		      return new EntryIterator();
-		    }
+	  
 	  private class EntryIterator implements Iterator<Map.Entry<K, V>> {
 		      final Iterator<Map.Entry<K, Collection<V>>> keyIterator;
 		      K key;
@@ -436,4 +455,4 @@ public final class MyMultimap<K,V> implements Multimap<K, V> {
 		      arrayList.trimToSize();
 		    }
 		 }
-}
+	}
