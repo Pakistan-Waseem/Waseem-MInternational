@@ -21,8 +21,10 @@ public class Main {
 		System.out.println( "Hello World!" );
         /*GuavaMultimap tester = new GuavaMultimap();
         tester.testMultimap();*/
-        GuavaBimap test1=new GuavaBimap();
-        test1.testBimap();
+        /*GuavaBimap test1=new GuavaBimap();
+        test1.testBimap();*/
+        MyMultimapTest test1=new MyMultimapTest();
+        test1.testMultimap();
 	}
 
 }

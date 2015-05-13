@@ -226,7 +226,7 @@ public final class MyMultimap<K,V> implements Multimap<K, V> {
 
 		public void clear() {
 			// TODO Auto-generated method stub
-			map.clear();
+			MyMultimap.this.clear();
 		}
 
 		public boolean isEmpty() {
@@ -408,14 +408,12 @@ public final class MyMultimap<K,V> implements Multimap<K, V> {
 		      K key;
 		      Collection<V> collection;
 		      Iterator<V> valueIterator;
-		  
 		      EntryIterator() {
 		        keyIterator = map.entrySet().iterator();
 		        if (keyIterator.hasNext()) {
 		          findValueIteratorAndKey();
 		        }
 		      }
-		  
 		      void findValueIteratorAndKey() {
 		        Map.Entry<K, Collection<V>> entry = keyIterator.next();
 		        key = entry.getKey();
@@ -441,13 +439,50 @@ public final class MyMultimap<K,V> implements Multimap<K, V> {
 		        totalSize--;
 		      }
 		    }
+	private transient Collection<Map.Entry<K, V>> entries;
 	public Collection<Entry<K, V>> entries() {
-		return null;
 		// TODO Auto-generated method stub
+		Collection<Map.Entry<K, V>> result = entries;
+		return result==null?entries=createEntries():entries;
 	}
+	private Collection<Map.Entry<K, V>> createEntries() {
+		    
+		    return  new Entries();
+		  }
+		
+    private class Entries extends AbstractCollection<Map.Entry<K, V>> {
+		    @Override public Iterator<Map.Entry<K, V>> iterator() {
+		      return createEntryIterator();
+		    }
+		    @Override public int size() {
+		      return totalSize;
+		    }
+		    @Override public boolean contains(Object o) {
+		      if (!(o instanceof Map.Entry)) {
+		        return false;
+		      }
+		      Map.Entry<?, ?> entry = (Map.Entry<?, ?>) o;
+		      return containsEntry(entry.getKey(), entry.getValue());
+		    }
+		
+		    @Override public void clear() {
+		    	MyMultimap.this.clear();
+		    }
+		
+		    @Override public boolean remove(Object o) {
+		      if (!(o instanceof Map.Entry)) {
+		        return false;
+		      }
+		      Map.Entry<?, ?> entry = (Map.Entry<?, ?>) o;
+		      return MyMultimap.this.remove(entry.getKey(), entry.getValue());
+		    }
+		  }
+    Iterator<Map.Entry<K, V>> createEntryIterator() {
+    	    return new EntryIterator();
+    	  }
 	public Map<K, Collection<V>> asMap() {
 		// TODO Auto-generated method stub
-		return null;
+		return map;
 	}
 	public void trimToSize() {
            for (Collection<V> collection : map.values()) {

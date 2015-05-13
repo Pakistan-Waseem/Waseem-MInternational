@@ -31,6 +31,8 @@ public class GuavaMultimap {
 	      System.out.println(lowerList.toString());
 	      Multiset<String> keysMultiset=multimap.keys();
 	      System.out.println(keysMultiset.size());
+	     /* Collection<String> values=multimap.values();
+	      values.add("z");*/
 	      /*lowerList = (List<String>)multimap.get("lower");
 	      System.out.println("Modified lower case list");
 	      System.out.println(lowerList.toString());
