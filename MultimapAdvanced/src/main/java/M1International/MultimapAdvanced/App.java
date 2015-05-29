@@ -10,6 +10,7 @@ import com.google.common.collect.Multimap;
  *
  */
 public class App {
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		System.out.println("Hello World!");
 		/*
@@ -32,7 +33,6 @@ public class App {
 		// multimap.add("lower", "e");
 		MyMultimapInterface<String, String> inverse = multimap.inverse();
 		List<String> lowerList = (List<String>) multimap.get("lower");
-		System.out.println("Initial lower case list");
 		System.out.println(lowerList.toString());
 		List<String> lowerList1 = (List<String>) inverse.get("a");
 		System.out.println(lowerList1.toString());
