@@ -23,11 +23,11 @@ public class App {
 		 * MyMultimapTest test1=new MyMultimapTest(); test1.testMultimap();
 		 */
 
-		MyMultimapInterface<String, String> multimap = AdvancedMultimap
+		MyMultimapInterface<String, String> multimap = AdvancedMyMultimap
 				.create();
 
-		multimap.add("lower", "a");
-		multimap.add("upper", "b");
+		multimap.put("lower", "a");
+		multimap.put("upper", "b");
 		// multimap.add("lower", "c");
 		// multimap.add("lower", "d");
 		// multimap.add("lower", "e");
@@ -36,7 +36,7 @@ public class App {
 		System.out.println(lowerList.toString());
 		List<String> lowerList1 = (List<String>) inverse.get("a");
 		System.out.println(lowerList1.toString());
-		inverse.add("f", "lower");
+		inverse.put("f", "lower");
 		lowerList = (List<String>) multimap.get("lower");
 		System.out.println(lowerList.toString());
 

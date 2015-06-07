@@ -3,22 +3,47 @@
  */
 package M1International.MultimapAdvanced;
 
+import java.lang.Object;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.Multiset;
 
 /**
  * @author waseem
  *
  */
 public interface MyMultimapInterface<K, V> {
-	boolean add(K key, V value);
+	
+	boolean put(K key, V value);
 
-	boolean containsKey(K key);
+	boolean containsKey(Object key);
+	
+	boolean containsValue(Object value);
+	
+	boolean containsEntry(Object key,Object value);
+	
+	boolean remove(Object key,Object value);
+	
+	boolean putAll(K key, Iterable<? extends V> values);
+	
+	Set<K> keySet();
+	
+	Multiset<K> keys();
+	
+	Collection<V> values();
+	
+	Collection<Map.Entry<K, V>> entries();
+	
+	Collection<V> get(K key);
 
 	MyMultimapInterface<V, K> inverse();
-
-	Collection<?> get(K key);
-
+	
 	int size();
 
 	boolean isEmpty();
+	
+	void clear();
+	
 }
