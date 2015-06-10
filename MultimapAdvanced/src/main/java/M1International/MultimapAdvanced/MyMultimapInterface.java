@@ -37,6 +37,8 @@ public interface MyMultimapInterface<K, V> {
 	Collection<Map.Entry<K, V>> entries();
 	
 	Collection<V> get(K key);
+	
+	Map<K, Collection<V>> asMap();
 
 	MyMultimapInterface<V, K> inverse();
 	

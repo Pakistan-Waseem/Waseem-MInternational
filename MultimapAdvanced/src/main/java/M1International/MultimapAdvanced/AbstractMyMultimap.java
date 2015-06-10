@@ -41,7 +41,6 @@ public abstract class AbstractMyMultimap<K, V> implements
 	public AbstractMyMultimap(Map<K, Collection<V>> a, Map<V, Collection<K>> b) {
 		original = a;
 		inverse = new Reverse<V, K>(b, this);
-
 	}
 
 	private AbstractMyMultimap(Map<K, Collection<V>> c,
@@ -54,6 +53,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 
 		if (updateMaps(key, value)) {
 			totalSize++;
+			this.inverse.totalSize++;
 			return true;
 		}
 		return false;
@@ -199,6 +199,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 		}
 		inverse.original.clear();
 		totalSize = 0;
+		this.inverse.totalSize=0;
 	}
 
 	public boolean putAll(K key, Iterable<? extends V> values) {
@@ -209,10 +210,10 @@ public abstract class AbstractMyMultimap<K, V> implements
 		for (V value : values) {
 			changed |= updateMaps(key, value);
 			totalSize++;
+			this.inverse.totalSize++;
 		}
 		return changed;
 	}
-
 	private transient Set<K> keySet;
 
 	public Set<K> keySet() {
@@ -259,6 +260,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 							removeFromInverse(entry.getKey(), iterator.next());
 						}
 						totalSize -= collection.size();
+						AbstractMyMultimap.this.inverse.totalSize-= collection.size();
 						collection.clear();
 					}
 				}
@@ -283,6 +285,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				collection.clear();
 			}
 			totalSize -= count;
+			AbstractMyMultimap.this.inverse.totalSize-= count;
 			return count > 0;
 		}
 
@@ -381,6 +384,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				collection.clear();
 				subMap.remove(element);
 				totalSize -= count;
+				AbstractMyMultimap.this.inverse.totalSize-=count;
 				return count;
 			}
 
@@ -392,6 +396,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				removeFromInverse(element, value);
 			}
 			totalSize -= occurrences;
+			AbstractMyMultimap.this.inverse.totalSize-= occurrences;
 			return count;
 		}
 
@@ -448,6 +453,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				collection.clear();
 			}
 			totalSize -= count;
+			AbstractMyMultimap.this.inverse.totalSize-= count;
 			return count > 0;
 		}
 
@@ -556,6 +562,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				keyIterator.remove();
 			}
 			totalSize--;
+			AbstractMyMultimap.this.inverse.totalSize--;
 		}
 	}
 
@@ -672,6 +679,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 			}
 			output.addAll(collection);
 			totalSize -= collection.size();
+			AbstractMyMultimap.this.inverse.totalSize-= collection.size();
 			collection.clear();
 			return output;
 		}
@@ -713,6 +721,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				}
 				collection.clear();
 				totalSize -= count;
+				AbstractMyMultimap.this.inverse.totalSize-= count;
 				return true;
 			}
 		}
@@ -740,6 +749,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				}
 				delegateIterator.remove();
 				totalSize -= collection.size();
+				AbstractMyMultimap.this.inverse.totalSize-= collection.size();
 				collection.clear();
 			}
 		}
@@ -747,5 +757,4 @@ public abstract class AbstractMyMultimap<K, V> implements
 	public AbstractMyMultimap<V, K> inverse() {
 		return inverse;
 	}
-
 }
