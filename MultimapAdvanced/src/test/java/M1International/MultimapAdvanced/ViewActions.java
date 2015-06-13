@@ -4,6 +4,7 @@
 package M1International.MultimapAdvanced;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Set;
 
 import com.google.common.collect.Multiset;
@@ -14,7 +15,7 @@ import junit.framework.TestCase;
  * @author waseem
  *
  */
-public class Views extends TestCase {
+public class ViewActions extends TestCase {
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -112,7 +113,25 @@ public class Views extends TestCase {
 	    myMultimap.put("Zahid", "Banana");
 	    Collection<String> values=myMultimap.values();
 	    values.clear();
-	    assertTrue(myMultimap.size()==0);
+	    myMultimap.put("Zahid", "Banana");
+	    assertTrue(myMultimap.size()==1);
 	}
+	public void testValuesCollectionIterator()
+	{
+		myMultimap.put("Waseem", "Banana");
+		myMultimap.put("Waseem", "Apple");
+		myMultimap.put("Waseem", "Pear");
+		myMultimap.put("Rene", "Apple");
+		myMultimap.put("Rene", "Orange");
+	    myMultimap.put("Zahid", "Banana");
+	    Collection<String> values=myMultimap.values();
+	    Iterator<String> iterator=values.iterator();
+	    while(iterator.hasNext())
+	    {
+	    	System.out.println(iterator.next());
+	    }
+	    assertTrue(myMultimap.size()==6);
+	}
+	
 
 }

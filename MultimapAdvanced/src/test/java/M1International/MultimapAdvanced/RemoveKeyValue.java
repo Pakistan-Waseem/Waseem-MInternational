@@ -11,7 +11,7 @@ import junit.framework.TestCase;
  * @author waseem
  *
  */
-public class RemoveElement extends TestCase {
+public class RemoveKeyValue extends TestCase {
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()

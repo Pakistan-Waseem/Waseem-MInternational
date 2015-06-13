@@ -8,10 +8,10 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(AllTests.class.getName());
 		//$JUnit-BEGIN$
-		suite.addTestSuite(AddingElement.class);
-		suite.addTestSuite(RemoveElement.class);
-		suite.addTestSuite(ContainsAction.class);
-		suite.addTestSuite(Views.class);
+		suite.addTestSuite(AddKeyValue.class);
+		suite.addTestSuite(RemoveKeyValue.class);
+		suite.addTestSuite(ContainActions.class);
+		suite.addTestSuite(ViewActions.class);
 		//$JUnit-END$
 		return suite;
 	}

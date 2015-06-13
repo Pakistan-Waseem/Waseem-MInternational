@@ -9,7 +9,7 @@ import junit.framework.TestCase;
  * @author waseem
  *
  */
-public class ContainsAction extends TestCase {
+public class ContainActions extends TestCase {
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()

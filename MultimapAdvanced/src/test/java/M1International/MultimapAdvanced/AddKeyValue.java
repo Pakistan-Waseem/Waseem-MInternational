@@ -11,7 +11,7 @@ import junit.framework.TestCase;
  * @author waseem
  *
  */
-public class AddElement extends TestCase {
+public class AddKeyValue extends TestCase {
 
 	/*
 	 * (non-Javadoc)
@@ -48,7 +48,7 @@ public class AddElement extends TestCase {
 		assertTrue(fruits.size()==3);
 		
 	}
-	public void testAdditionSize()
+	public void testSize()
 	{
 		myMultimap.put("Fruits", "Bannana");
 		myMultimap.put("Fruits", "Apple");
