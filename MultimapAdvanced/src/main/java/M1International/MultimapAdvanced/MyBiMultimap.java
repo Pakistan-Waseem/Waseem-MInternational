@@ -14,7 +14,7 @@ import com.google.common.collect.Multiset;
  * @author waseem
  *
  */
-public interface MyMultimapInterface<K, V> {
+public interface MyBiMultimap<K, V> {
 	
 	boolean put(K key, V value);
 
@@ -40,7 +40,7 @@ public interface MyMultimapInterface<K, V> {
 	
 	Map<K, Collection<V>> asMap();
 
-	MyMultimapInterface<V, K> inverse();
+	MyBiMultimap<V, K> inverse();
 	
 	int size();
 

@@ -18,8 +18,8 @@ public class AddKeyValue extends TestCase {
 	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
-	MyMultimapInterface<String, String> myMultimap;
-	MyMultimapInterface<String, String> inverseMyMultimap;
+	MyBiMultimap<String, String> myMultimap;
+	MyBiMultimap<String, String> inverseMyMultimap;
 
 	protected void setUp() throws Exception {
 		super.setUp();

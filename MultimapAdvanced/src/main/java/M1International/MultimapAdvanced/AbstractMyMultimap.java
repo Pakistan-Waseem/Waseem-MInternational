@@ -31,7 +31,7 @@ import com.google.common.collect.Multiset;
  *
  */
 public abstract class AbstractMyMultimap<K, V> implements
-		MyMultimapInterface<K, V> {
+		MyBiMultimap<K, V> {
 
 	private transient Map<K, Collection<V>> original;
 	private transient AbstractMyMultimap<V, K> inverse;
