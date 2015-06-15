@@ -30,21 +30,21 @@ import com.google.common.collect.Multiset;
  * @param <V>
  *
  */
-public abstract class AbstractMyMultimap<K, V> implements
+public abstract class AbstractMyBiMultimap<K, V> implements
 		MyBiMultimap<K, V> {
 
 	private transient Map<K, Collection<V>> original;
-	private transient AbstractMyMultimap<V, K> inverse;
+	private transient AbstractMyBiMultimap<V, K> inverse;
 	private transient int totalSize;
 	private static final int initialCollectionSize = 5;
 
-	public AbstractMyMultimap(Map<K, Collection<V>> a, Map<V, Collection<K>> b) {
+	public AbstractMyBiMultimap(Map<K, Collection<V>> a, Map<V, Collection<K>> b) {
 		original = a;
 		inverse = new Reverse<V, K>(b, this);
 	}
 
-	private AbstractMyMultimap(Map<K, Collection<V>> c,
-			AbstractMyMultimap<V, K> d) {
+	private AbstractMyBiMultimap(Map<K, Collection<V>> c,
+			AbstractMyBiMultimap<V, K> d) {
 		original = c;
 		inverse = d;
 	}
@@ -96,9 +96,9 @@ public abstract class AbstractMyMultimap<K, V> implements
 		return original.containsKey(key);
 	}
 
-	private static class Reverse<K, V> extends AbstractMyMultimap<K, V> {
+	private static class Reverse<K, V> extends AbstractMyBiMultimap<K, V> {
 
-		private Reverse(Map<K, Collection<V>> c, AbstractMyMultimap<V, K> d) {
+		private Reverse(Map<K, Collection<V>> c, AbstractMyBiMultimap<V, K> d) {
 			super(c, d);
 		}
 	}
@@ -119,7 +119,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 	}
 
 	public boolean containsValue(Object value) {
-		AbstractMyMultimap<V, K> local = this.inverse();
+		AbstractMyBiMultimap<V, K> local = this.inverse();
 		return local.containsKey(value);
 	}
 
@@ -261,7 +261,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 							removeFromInverse(entry.getKey(), iterator.next());
 						}
 						totalSize -= collection.size();
-						AbstractMyMultimap.this.inverse.totalSize-= collection.size();
+						AbstractMyBiMultimap.this.inverse.totalSize-= collection.size();
 						collection.clear();
 					}
 				}
@@ -286,7 +286,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				collection.clear();
 			}
 			totalSize -= count;
-			AbstractMyMultimap.this.inverse.totalSize-= count;
+			AbstractMyBiMultimap.this.inverse.totalSize-= count;
 			return count > 0;
 		}
 
@@ -318,7 +318,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 
 		public void clear() {
 			// TODO Auto-generated method stub
-			AbstractMyMultimap.this.clear();
+			AbstractMyBiMultimap.this.clear();
 		}
 
 		public boolean isEmpty() {
@@ -385,7 +385,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				collection.clear();
 				subMap.remove(element);
 				totalSize -= count;
-				AbstractMyMultimap.this.inverse.totalSize-=count;
+				AbstractMyBiMultimap.this.inverse.totalSize-=count;
 				return count;
 			}
 
@@ -397,7 +397,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				removeFromInverse(element, value);
 			}
 			totalSize -= occurrences;
-			AbstractMyMultimap.this.inverse.totalSize-= occurrences;
+			AbstractMyBiMultimap.this.inverse.totalSize-= occurrences;
 			return count;
 		}
 
@@ -454,7 +454,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				collection.clear();
 			}
 			totalSize -= count;
-			AbstractMyMultimap.this.inverse.totalSize-= count;
+			AbstractMyBiMultimap.this.inverse.totalSize-= count;
 			return count > 0;
 		}
 
@@ -490,17 +490,17 @@ public abstract class AbstractMyMultimap<K, V> implements
 
 		@Override
 		public int size() {
-			return AbstractMyMultimap.this.size();
+			return AbstractMyBiMultimap.this.size();
 		}
 
 		@Override
 		public boolean contains(Object o) {
-			return AbstractMyMultimap.this.containsValue(o);
+			return AbstractMyBiMultimap.this.containsValue(o);
 		}
 
 		@Override
 		public void clear() {
-			AbstractMyMultimap.this.clear();
+			AbstractMyBiMultimap.this.clear();
 		}
 	}
 
@@ -563,7 +563,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				keyIterator.remove();
 			}
 			totalSize--;
-			AbstractMyMultimap.this.inverse.totalSize--;
+			AbstractMyBiMultimap.this.inverse.totalSize--;
 		}
 	}
 
@@ -601,7 +601,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 
 		@Override
 		public void clear() {
-			AbstractMyMultimap.this.clear();
+			AbstractMyBiMultimap.this.clear();
 		}
 
 		@Override
@@ -610,7 +610,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				return false;
 			}
 			Map.Entry<?, ?> entry = (Map.Entry<?, ?>) o;
-			return AbstractMyMultimap.this.remove(entry.getKey(),
+			return AbstractMyBiMultimap.this.remove(entry.getKey(),
 					entry.getValue());
 		}
 
@@ -662,7 +662,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 
 		@Override
 		public Set<K> keySet() {
-			return AbstractMyMultimap.this.keySet();
+			return AbstractMyBiMultimap.this.keySet();
 		}
 
 		@Override
@@ -680,7 +680,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 			}
 			output.addAll(collection);
 			totalSize -= collection.size();
-			AbstractMyMultimap.this.inverse.totalSize-= collection.size();
+			AbstractMyBiMultimap.this.inverse.totalSize-= collection.size();
 			collection.clear();
 			return output;
 		}
@@ -722,7 +722,7 @@ public abstract class AbstractMyMultimap<K, V> implements
 				}
 				collection.clear();
 				totalSize -= count;
-				AbstractMyMultimap.this.inverse.totalSize-= count;
+				AbstractMyBiMultimap.this.inverse.totalSize-= count;
 				return true;
 			}
 		}
@@ -750,12 +750,12 @@ public abstract class AbstractMyMultimap<K, V> implements
 				}
 				delegateIterator.remove();
 				totalSize -= collection.size();
-				AbstractMyMultimap.this.inverse.totalSize-= collection.size();
+				AbstractMyBiMultimap.this.inverse.totalSize-= collection.size();
 				collection.clear();
 			}
 		}
 	}
-	public AbstractMyMultimap<V, K> inverse() {
+	public AbstractMyBiMultimap<V, K> inverse() {
 		return inverse;
 	}
 }

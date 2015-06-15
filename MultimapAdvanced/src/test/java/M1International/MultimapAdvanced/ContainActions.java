@@ -19,7 +19,7 @@ public class ContainActions extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		myMultimap = AdvancedMyMultimap.create();
+		myMultimap = AdvancedMyBiMultimap.create();
 	}
     public void testContainsKey()
     {

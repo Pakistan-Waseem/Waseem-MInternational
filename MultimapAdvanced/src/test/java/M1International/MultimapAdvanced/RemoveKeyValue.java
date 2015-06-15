@@ -21,7 +21,7 @@ public class RemoveKeyValue extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		myMultimap = AdvancedMyMultimap.create();
+		myMultimap = AdvancedMyBiMultimap.create();
 	}
 
 	public void testRemoveElement() {

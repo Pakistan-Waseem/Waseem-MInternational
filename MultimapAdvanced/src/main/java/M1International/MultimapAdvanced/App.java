@@ -23,7 +23,7 @@ public class App {
 		 * MyMultimapTest test1=new MyMultimapTest(); test1.testMultimap();
 		 */
 
-		MyBiMultimap<String, String> multimap = AdvancedMyMultimap
+		MyBiMultimap<String, String> multimap = AdvancedMyBiMultimap
 				.create();
 
 		multimap.put("lower", "a");
